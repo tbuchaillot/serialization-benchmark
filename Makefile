@@ -17,6 +17,9 @@ clean:
 	rm -rf pb/*
 	rm -rf build/*
 
+bench:
+	go test -bench=. -benchtime=2s
+
 proto-link:                            ## Generate go protobuf files using symlinked modules
 	./protobuf_import.sh
 	protoc -I ./protobuf_import -I ./ ./model/analytics.proto --gofast_out=plugins=grpc:./pb

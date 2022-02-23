@@ -67,7 +67,7 @@ func Benchmark_GoTiny_Marshal(b *testing.B) {
 
 func Benchmark_NormalProto_Marshal(b *testing.B) {
 	b.Helper()
-	data := data
+	data := normalProtoData
 	b.ReportAllocs()
 	b.ResetTimer()
 	var serialSize int

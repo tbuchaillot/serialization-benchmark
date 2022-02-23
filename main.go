@@ -4,22 +4,28 @@ import (
 	"fmt"
 	"serialization-benchmark/model"
 	"time"
+
+	"github.com/niubaoshu/gotiny"
 )
 
 func main() {
+	//Playing with gotiny
 	test := model.Record{}
 	test.APIID = "api_1"
 	test.TimeStamp = time.Now()
-	fmt.Println("test:", test.APIID, "-", "-", test.TimeStamp)
 
-	proto := test.ToNormalProto()
+	lot := []model.Record{}
+	lot = append(lot, test)
+	test.APIID = "api_2"
+	lot = append(lot, test)
 
-	fmt.Println("newTest:", proto.APIID, "-", "-", proto.TimeStamp.AsTime())
+	fmt.Println("test:", lot)
+
+	byt := gotiny.Marshal(&lot)
+
+	newLots := []model.Record{}
+	gotiny.Unmarshal(byt, &newLots)
+
+	fmt.Println("newTest:", newLots)
 
 }
-
-/*
- - Bebop
- - gotiny (chino)
-
-*/
