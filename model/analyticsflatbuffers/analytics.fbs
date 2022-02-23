@@ -1,0 +1,65 @@
+// Generated from analytics.proto
+
+namespace analyticsflatbuffers;
+
+table AnalyticsRecord {
+  host:string;
+  method:string;
+  path:string;
+  raw_path:string;
+  content_length:long;
+  user_agent:string;
+  day:int;
+  month:int;
+  year:int;
+  hour:int;
+  response_code:int;
+  api_key:string;
+  api_version:string;
+  api_name:string;
+  api_id:string;
+  org_id:string;
+  request_time:long;
+  latency:analyticsflatbuffers.Latency;
+  raw_request:string;
+  raw_response:string;
+  ip_address:string;
+  geo:analyticsflatbuffers.GeoData;
+  network:analyticsflatbuffers.NetworkStats;
+  tags:[string];
+  alias:string;
+  track_path:bool;
+  oauth_id:string;
+}
+
+table Latency {
+  total:long;
+  upstream:long;
+}
+
+table Country {
+  iso_code:string;
+}
+
+table City {
+}
+
+table Location {
+  latitude:double;
+  longitude:double;
+  time_zone:string;
+}
+
+table GeoData {
+  country:analyticsflatbuffers.Country;
+  city:analyticsflatbuffers.City;
+  location:analyticsflatbuffers.Location;
+}
+
+table NetworkStats {
+  open_connections:long;
+  closed_connections:long;
+  bytes_in:long;
+  bytes_out:long;
+}
+
