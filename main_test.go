@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"serialization-benchmark/demo"
 	"serialization-benchmark/model"
+	"serialization-benchmark/model/analyticsflatbuffers"
 	"serialization-benchmark/model/normal_proto"
 	"testing"
 
@@ -16,6 +17,7 @@ import (
 
 var data []model.Record = demo.GenerateDemoData()
 var normalProtoData []normal_proto.AnalyticsRecord = demo.TransformToNormalProto(demo.GenerateDemoData())
+var normalFlatData []analyticsflatbuffers.AnalyticsRecord = demo.TransformToFlatBuffer(demo.GenerateDemoData())
 
 func Benchmark_JSON_Marshal(b *testing.B) {
 	b.Helper()
@@ -79,4 +81,23 @@ func Benchmark_NormalProto_Marshal(b *testing.B) {
 		serialSize += len(bytes)
 	}
 	b.ReportMetric(float64(serialSize)/float64(b.N), "B/serial")
+
 }
+
+/*
+func Benchmark_Flatbuffer_Marshal(b *testing.B) {
+	b.Helper()
+	data := normalFlatData
+	b.ReportAllocs()
+	b.ResetTimer()
+	var serialSize int
+
+	for n := 0; n < b.N; n++ {
+		o := data[rand.Intn(len(data))]
+
+
+		serialSize += len(bytes)
+	}
+	b.ReportMetric(float64(serialSize)/float64(b.N), "B/serial")
+}
+*/

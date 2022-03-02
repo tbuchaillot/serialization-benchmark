@@ -3,11 +3,9 @@ package demo
 import (
 	"math/rand"
 	"serialization-benchmark/model"
-	"serialization-benchmark/model/normal_proto"
 	"strings"
 	"time"
 
-	"github.com/TykTechnologies/tyk-pump/analytics"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -150,7 +148,7 @@ func GenerateDemoData() []model.Record {
 			for i := 0; i < volume; i++ {
 				p := randomPath()
 				api, apiID := randomAPI()
-				r := analytics.AnalyticsRecord{
+				r := model.Record{
 					Method:        randomMethod(),
 					Path:          p,
 					RawPath:       p,
@@ -179,115 +177,8 @@ func GenerateDemoData() []model.Record {
 				}
 
 				r.Geo.Country.ISOCode = country()
-				m := model.Record{r}
-				recs = append(recs, m)
-			}
-		}
-		count++
-	}
-	return recs
-}
-
-func GenerateDemoDataProto() []normal_proto.AnalyticsRecord {
-	recs := []normal_proto.AnalyticsRecord{}
-
-	start := time.Now()
-	orgId := "orgID123901203"
-	count := 0
-	for d := 10; d >= 0; d-- {
-		for h := 0; h < 10; h++ {
-			ts := start.AddDate(0, 0, d)
-			ts = ts.Add(time.Duration(h) * time.Hour)
-			// Generate daily entries
-			volume := randomInRange(300, 500)
-			for i := 0; i < volume; i++ {
-				p := randomPath()
-				api, apiID := randomAPI()
-				r := analytics.AnalyticsRecord{
-					Method:        randomMethod(),
-					Path:          p,
-					RawPath:       p,
-					ContentLength: int64(randomInRange(0, 999)),
-					UserAgent:     getUA(),
-					Day:           ts.Day(),
-					Month:         ts.Month(),
-					Year:          ts.Year(),
-					Hour:          ts.Hour(),
-					ResponseCode:  responseCode(),
-					APIKey:        getRandomKey(),
-					TimeStamp:     ts,
-					APIVersion:    apiVersion,
-					APIName:       api,
-					APIID:         apiID,
-					OrgID:         orgId,
-					OauthID:       "",
-					RequestTime:   int64(randomInRange(0, 10)),
-					RawRequest:    "Qk9EWSBEQVRB",
-					RawResponse:   "UkVTUE9OU0UgREFUQQ==",
-					IPAddress:     "118.93.55.103",
-					Tags:          []string{"orgid-" + orgId, "apiid-" + apiID},
-					Alias:         "",
-					TrackPath:     true,
-					ExpireAt:      time.Now().Add(time.Hour * 8760),
-				}
-
-				r.Geo.Country.ISOCode = country()
-				m := model.Record{r}.ToNormalProto()
-				recs = append(recs, m)
-			}
-		}
-		count++
-	}
-	return recs
-}
-
-func GenerateFutureDemoData() []model.FutureRecord {
-	recs := []model.FutureRecord{}
-
-	start := time.Now()
-	orgId := "orgID123901203"
-	count := 0
-	for d := 10; d >= 0; d-- {
-		for h := 0; h < 10; h++ {
-			ts := start.AddDate(0, 0, d)
-			ts = ts.Add(time.Duration(h) * time.Hour)
-			// Generate daily entries
-			volume := randomInRange(300, 500)
-			for i := 0; i < volume; i++ {
-				p := randomPath()
-				api, apiID := randomAPI()
-				r := analytics.AnalyticsRecord{
-					Method:        randomMethod(),
-					Path:          p,
-					RawPath:       p,
-					ContentLength: int64(randomInRange(0, 999)),
-					UserAgent:     getUA(),
-					Day:           ts.Day(),
-					Month:         ts.Month(),
-					Year:          ts.Year(),
-					Hour:          ts.Hour(),
-					ResponseCode:  responseCode(),
-					APIKey:        getRandomKey(),
-					TimeStamp:     ts,
-					APIVersion:    apiVersion,
-					APIName:       api,
-					APIID:         apiID,
-					OrgID:         orgId,
-					OauthID:       "",
-					RequestTime:   int64(randomInRange(0, 10)),
-					RawRequest:    "Qk9EWSBEQVRB",
-					RawResponse:   "UkVTUE9OU0UgREFUQQ==",
-					IPAddress:     "118.93.55.103",
-					Tags:          []string{"orgid-" + orgId, "apiid-" + apiID},
-					Alias:         "",
-					TrackPath:     true,
-					ExpireAt:      time.Now().Add(time.Hour * 8760),
-				}
-
-				r.Geo.Country.ISOCode = country()
-				m := model.FutureRecord{AnalyticsRecord: r}
-				m.NewData = getRandomKey()
-				recs = append(recs, m)
+			
+				recs = append(recs, r)
 			}
 		}
 		count++
