@@ -1,4 +1,4 @@
-struct AnalyticsRecord  {
+struct AnalyticsRecord struct {
 	Method        string       `json:"method" gorm:"column:method"`
 	Host          string       `json:"host" gorm:"column:host"`
 	Path          string       `json:"path" gorm:"column:path"`
