@@ -127,13 +127,223 @@ func (z *FutureRecord) DecodeMsg(dc *msgp.Reader) (err error) {
 			return
 		}
 		switch msgp.UnsafeString(field) {
-		case "Record":
-			err = z.Record.DecodeMsg(dc)
+		case "method":
+			z.Method, err = dc.ReadString()
 			if err != nil {
-				err = msgp.WrapError(err, "Record")
+				err = msgp.WrapError(err, "Method")
 				return
 			}
-		case "NewData":
+		case "host":
+			z.Host, err = dc.ReadString()
+			if err != nil {
+				err = msgp.WrapError(err, "Host")
+				return
+			}
+		case "path":
+			z.Path, err = dc.ReadString()
+			if err != nil {
+				err = msgp.WrapError(err, "Path")
+				return
+			}
+		case "raw_path":
+			z.RawPath, err = dc.ReadString()
+			if err != nil {
+				err = msgp.WrapError(err, "RawPath")
+				return
+			}
+		case "content_length":
+			z.ContentLength, err = dc.ReadInt64()
+			if err != nil {
+				err = msgp.WrapError(err, "ContentLength")
+				return
+			}
+		case "user_agent":
+			z.UserAgent, err = dc.ReadString()
+			if err != nil {
+				err = msgp.WrapError(err, "UserAgent")
+				return
+			}
+		case "day":
+			z.Day, err = dc.ReadInt()
+			if err != nil {
+				err = msgp.WrapError(err, "Day")
+				return
+			}
+		case "month":
+			z.Month, err = dc.ReadInt()
+			if err != nil {
+				err = msgp.WrapError(err, "Month")
+				return
+			}
+		case "year":
+			z.Year, err = dc.ReadInt()
+			if err != nil {
+				err = msgp.WrapError(err, "Year")
+				return
+			}
+		case "hour":
+			z.Hour, err = dc.ReadInt()
+			if err != nil {
+				err = msgp.WrapError(err, "Hour")
+				return
+			}
+		case "response_code":
+			z.ResponseCode, err = dc.ReadInt()
+			if err != nil {
+				err = msgp.WrapError(err, "ResponseCode")
+				return
+			}
+		case "api_key":
+			z.APIKey, err = dc.ReadString()
+			if err != nil {
+				err = msgp.WrapError(err, "APIKey")
+				return
+			}
+		case "timestamp":
+			z.TimeStamp, err = dc.ReadTime()
+			if err != nil {
+				err = msgp.WrapError(err, "TimeStamp")
+				return
+			}
+		case "api_version":
+			z.APIVersion, err = dc.ReadString()
+			if err != nil {
+				err = msgp.WrapError(err, "APIVersion")
+				return
+			}
+		case "api_name":
+			z.APIName, err = dc.ReadString()
+			if err != nil {
+				err = msgp.WrapError(err, "APIName")
+				return
+			}
+		case "api_id":
+			z.APIID, err = dc.ReadString()
+			if err != nil {
+				err = msgp.WrapError(err, "APIID")
+				return
+			}
+		case "org_id":
+			z.OrgID, err = dc.ReadString()
+			if err != nil {
+				err = msgp.WrapError(err, "OrgID")
+				return
+			}
+		case "oauth_id":
+			z.OauthID, err = dc.ReadString()
+			if err != nil {
+				err = msgp.WrapError(err, "OauthID")
+				return
+			}
+		case "request_time":
+			z.RequestTime, err = dc.ReadInt64()
+			if err != nil {
+				err = msgp.WrapError(err, "RequestTime")
+				return
+			}
+		case "raw_request":
+			z.RawRequest, err = dc.ReadString()
+			if err != nil {
+				err = msgp.WrapError(err, "RawRequest")
+				return
+			}
+		case "raw_response":
+			z.RawResponse, err = dc.ReadString()
+			if err != nil {
+				err = msgp.WrapError(err, "RawResponse")
+				return
+			}
+		case "ip_address":
+			z.IPAddress, err = dc.ReadString()
+			if err != nil {
+				err = msgp.WrapError(err, "IPAddress")
+				return
+			}
+		case "geo":
+			err = z.Geo.DecodeMsg(dc)
+			if err != nil {
+				err = msgp.WrapError(err, "Geo")
+				return
+			}
+		case "network":
+			err = z.Network.DecodeMsg(dc)
+			if err != nil {
+				err = msgp.WrapError(err, "Network")
+				return
+			}
+		case "latency":
+			var zb0002 uint32
+			zb0002, err = dc.ReadMapHeader()
+			if err != nil {
+				err = msgp.WrapError(err, "Latency")
+				return
+			}
+			for zb0002 > 0 {
+				zb0002--
+				field, err = dc.ReadMapKeyPtr()
+				if err != nil {
+					err = msgp.WrapError(err, "Latency")
+					return
+				}
+				switch msgp.UnsafeString(field) {
+				case "total":
+					z.Latency.Total, err = dc.ReadInt64()
+					if err != nil {
+						err = msgp.WrapError(err, "Latency", "Total")
+						return
+					}
+				case "upstream":
+					z.Latency.Upstream, err = dc.ReadInt64()
+					if err != nil {
+						err = msgp.WrapError(err, "Latency", "Upstream")
+						return
+					}
+				default:
+					err = dc.Skip()
+					if err != nil {
+						err = msgp.WrapError(err, "Latency")
+						return
+					}
+				}
+			}
+		case "tags":
+			var zb0003 uint32
+			zb0003, err = dc.ReadArrayHeader()
+			if err != nil {
+				err = msgp.WrapError(err, "Tags")
+				return
+			}
+			if cap(z.Tags) >= int(zb0003) {
+				z.Tags = (z.Tags)[:zb0003]
+			} else {
+				z.Tags = make([]string, zb0003)
+			}
+			for za0001 := range z.Tags {
+				z.Tags[za0001], err = dc.ReadString()
+				if err != nil {
+					err = msgp.WrapError(err, "Tags", za0001)
+					return
+				}
+			}
+		case "alias":
+			z.Alias, err = dc.ReadString()
+			if err != nil {
+				err = msgp.WrapError(err, "Alias")
+				return
+			}
+		case "track_path":
+			z.TrackPath, err = dc.ReadBool()
+			if err != nil {
+				err = msgp.WrapError(err, "TrackPath")
+				return
+			}
+		case "expireAt":
+			z.ExpireAt, err = dc.ReadTime()
+			if err != nil {
+				err = msgp.WrapError(err, "ExpireAt")
+				return
+			}
+		case "new_data":
 			z.NewData, err = dc.ReadString()
 			if err != nil {
 				err = msgp.WrapError(err, "NewData")
@@ -152,19 +362,322 @@ func (z *FutureRecord) DecodeMsg(dc *msgp.Reader) (err error) {
 
 // EncodeMsg implements msgp.Encodable
 func (z *FutureRecord) EncodeMsg(en *msgp.Writer) (err error) {
+	// map header, size 30
+	// write "method"
+	err = en.Append(0xde, 0x0, 0x1e, 0xa6, 0x6d, 0x65, 0x74, 0x68, 0x6f, 0x64)
+	if err != nil {
+		return
+	}
+	err = en.WriteString(z.Method)
+	if err != nil {
+		err = msgp.WrapError(err, "Method")
+		return
+	}
+	// write "host"
+	err = en.Append(0xa4, 0x68, 0x6f, 0x73, 0x74)
+	if err != nil {
+		return
+	}
+	err = en.WriteString(z.Host)
+	if err != nil {
+		err = msgp.WrapError(err, "Host")
+		return
+	}
+	// write "path"
+	err = en.Append(0xa4, 0x70, 0x61, 0x74, 0x68)
+	if err != nil {
+		return
+	}
+	err = en.WriteString(z.Path)
+	if err != nil {
+		err = msgp.WrapError(err, "Path")
+		return
+	}
+	// write "raw_path"
+	err = en.Append(0xa8, 0x72, 0x61, 0x77, 0x5f, 0x70, 0x61, 0x74, 0x68)
+	if err != nil {
+		return
+	}
+	err = en.WriteString(z.RawPath)
+	if err != nil {
+		err = msgp.WrapError(err, "RawPath")
+		return
+	}
+	// write "content_length"
+	err = en.Append(0xae, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x5f, 0x6c, 0x65, 0x6e, 0x67, 0x74, 0x68)
+	if err != nil {
+		return
+	}
+	err = en.WriteInt64(z.ContentLength)
+	if err != nil {
+		err = msgp.WrapError(err, "ContentLength")
+		return
+	}
+	// write "user_agent"
+	err = en.Append(0xaa, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x61, 0x67, 0x65, 0x6e, 0x74)
+	if err != nil {
+		return
+	}
+	err = en.WriteString(z.UserAgent)
+	if err != nil {
+		err = msgp.WrapError(err, "UserAgent")
+		return
+	}
+	// write "day"
+	err = en.Append(0xa3, 0x64, 0x61, 0x79)
+	if err != nil {
+		return
+	}
+	err = en.WriteInt(z.Day)
+	if err != nil {
+		err = msgp.WrapError(err, "Day")
+		return
+	}
+	// write "month"
+	err = en.Append(0xa5, 0x6d, 0x6f, 0x6e, 0x74, 0x68)
+	if err != nil {
+		return
+	}
+	err = en.WriteInt(z.Month)
+	if err != nil {
+		err = msgp.WrapError(err, "Month")
+		return
+	}
+	// write "year"
+	err = en.Append(0xa4, 0x79, 0x65, 0x61, 0x72)
+	if err != nil {
+		return
+	}
+	err = en.WriteInt(z.Year)
+	if err != nil {
+		err = msgp.WrapError(err, "Year")
+		return
+	}
+	// write "hour"
+	err = en.Append(0xa4, 0x68, 0x6f, 0x75, 0x72)
+	if err != nil {
+		return
+	}
+	err = en.WriteInt(z.Hour)
+	if err != nil {
+		err = msgp.WrapError(err, "Hour")
+		return
+	}
+	// write "response_code"
+	err = en.Append(0xad, 0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x5f, 0x63, 0x6f, 0x64, 0x65)
+	if err != nil {
+		return
+	}
+	err = en.WriteInt(z.ResponseCode)
+	if err != nil {
+		err = msgp.WrapError(err, "ResponseCode")
+		return
+	}
+	// write "api_key"
+	err = en.Append(0xa7, 0x61, 0x70, 0x69, 0x5f, 0x6b, 0x65, 0x79)
+	if err != nil {
+		return
+	}
+	err = en.WriteString(z.APIKey)
+	if err != nil {
+		err = msgp.WrapError(err, "APIKey")
+		return
+	}
+	// write "timestamp"
+	err = en.Append(0xa9, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70)
+	if err != nil {
+		return
+	}
+	err = en.WriteTime(z.TimeStamp)
+	if err != nil {
+		err = msgp.WrapError(err, "TimeStamp")
+		return
+	}
+	// write "api_version"
+	err = en.Append(0xab, 0x61, 0x70, 0x69, 0x5f, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e)
+	if err != nil {
+		return
+	}
+	err = en.WriteString(z.APIVersion)
+	if err != nil {
+		err = msgp.WrapError(err, "APIVersion")
+		return
+	}
+	// write "api_name"
+	err = en.Append(0xa8, 0x61, 0x70, 0x69, 0x5f, 0x6e, 0x61, 0x6d, 0x65)
+	if err != nil {
+		return
+	}
+	err = en.WriteString(z.APIName)
+	if err != nil {
+		err = msgp.WrapError(err, "APIName")
+		return
+	}
+	// write "api_id"
+	err = en.Append(0xa6, 0x61, 0x70, 0x69, 0x5f, 0x69, 0x64)
+	if err != nil {
+		return
+	}
+	err = en.WriteString(z.APIID)
+	if err != nil {
+		err = msgp.WrapError(err, "APIID")
+		return
+	}
+	// write "org_id"
+	err = en.Append(0xa6, 0x6f, 0x72, 0x67, 0x5f, 0x69, 0x64)
+	if err != nil {
+		return
+	}
+	err = en.WriteString(z.OrgID)
+	if err != nil {
+		err = msgp.WrapError(err, "OrgID")
+		return
+	}
+	// write "oauth_id"
+	err = en.Append(0xa8, 0x6f, 0x61, 0x75, 0x74, 0x68, 0x5f, 0x69, 0x64)
+	if err != nil {
+		return
+	}
+	err = en.WriteString(z.OauthID)
+	if err != nil {
+		err = msgp.WrapError(err, "OauthID")
+		return
+	}
+	// write "request_time"
+	err = en.Append(0xac, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x5f, 0x74, 0x69, 0x6d, 0x65)
+	if err != nil {
+		return
+	}
+	err = en.WriteInt64(z.RequestTime)
+	if err != nil {
+		err = msgp.WrapError(err, "RequestTime")
+		return
+	}
+	// write "raw_request"
+	err = en.Append(0xab, 0x72, 0x61, 0x77, 0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74)
+	if err != nil {
+		return
+	}
+	err = en.WriteString(z.RawRequest)
+	if err != nil {
+		err = msgp.WrapError(err, "RawRequest")
+		return
+	}
+	// write "raw_response"
+	err = en.Append(0xac, 0x72, 0x61, 0x77, 0x5f, 0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65)
+	if err != nil {
+		return
+	}
+	err = en.WriteString(z.RawResponse)
+	if err != nil {
+		err = msgp.WrapError(err, "RawResponse")
+		return
+	}
+	// write "ip_address"
+	err = en.Append(0xaa, 0x69, 0x70, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73)
+	if err != nil {
+		return
+	}
+	err = en.WriteString(z.IPAddress)
+	if err != nil {
+		err = msgp.WrapError(err, "IPAddress")
+		return
+	}
+	// write "geo"
+	err = en.Append(0xa3, 0x67, 0x65, 0x6f)
+	if err != nil {
+		return
+	}
+	err = z.Geo.EncodeMsg(en)
+	if err != nil {
+		err = msgp.WrapError(err, "Geo")
+		return
+	}
+	// write "network"
+	err = en.Append(0xa7, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b)
+	if err != nil {
+		return
+	}
+	err = z.Network.EncodeMsg(en)
+	if err != nil {
+		err = msgp.WrapError(err, "Network")
+		return
+	}
+	// write "latency"
+	err = en.Append(0xa7, 0x6c, 0x61, 0x74, 0x65, 0x6e, 0x63, 0x79)
+	if err != nil {
+		return
+	}
 	// map header, size 2
-	// write "Record"
-	err = en.Append(0x82, 0xa6, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64)
+	// write "total"
+	err = en.Append(0x82, 0xa5, 0x74, 0x6f, 0x74, 0x61, 0x6c)
 	if err != nil {
 		return
 	}
-	err = z.Record.EncodeMsg(en)
+	err = en.WriteInt64(z.Latency.Total)
 	if err != nil {
-		err = msgp.WrapError(err, "Record")
+		err = msgp.WrapError(err, "Latency", "Total")
 		return
 	}
-	// write "NewData"
-	err = en.Append(0xa7, 0x4e, 0x65, 0x77, 0x44, 0x61, 0x74, 0x61)
+	// write "upstream"
+	err = en.Append(0xa8, 0x75, 0x70, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d)
+	if err != nil {
+		return
+	}
+	err = en.WriteInt64(z.Latency.Upstream)
+	if err != nil {
+		err = msgp.WrapError(err, "Latency", "Upstream")
+		return
+	}
+	// write "tags"
+	err = en.Append(0xa4, 0x74, 0x61, 0x67, 0x73)
+	if err != nil {
+		return
+	}
+	err = en.WriteArrayHeader(uint32(len(z.Tags)))
+	if err != nil {
+		err = msgp.WrapError(err, "Tags")
+		return
+	}
+	for za0001 := range z.Tags {
+		err = en.WriteString(z.Tags[za0001])
+		if err != nil {
+			err = msgp.WrapError(err, "Tags", za0001)
+			return
+		}
+	}
+	// write "alias"
+	err = en.Append(0xa5, 0x61, 0x6c, 0x69, 0x61, 0x73)
+	if err != nil {
+		return
+	}
+	err = en.WriteString(z.Alias)
+	if err != nil {
+		err = msgp.WrapError(err, "Alias")
+		return
+	}
+	// write "track_path"
+	err = en.Append(0xaa, 0x74, 0x72, 0x61, 0x63, 0x6b, 0x5f, 0x70, 0x61, 0x74, 0x68)
+	if err != nil {
+		return
+	}
+	err = en.WriteBool(z.TrackPath)
+	if err != nil {
+		err = msgp.WrapError(err, "TrackPath")
+		return
+	}
+	// write "expireAt"
+	err = en.Append(0xa8, 0x65, 0x78, 0x70, 0x69, 0x72, 0x65, 0x41, 0x74)
+	if err != nil {
+		return
+	}
+	err = en.WriteTime(z.ExpireAt)
+	if err != nil {
+		err = msgp.WrapError(err, "ExpireAt")
+		return
+	}
+	// write "new_data"
+	err = en.Append(0xa8, 0x6e, 0x65, 0x77, 0x5f, 0x64, 0x61, 0x74, 0x61)
 	if err != nil {
 		return
 	}
@@ -179,16 +692,113 @@ func (z *FutureRecord) EncodeMsg(en *msgp.Writer) (err error) {
 // MarshalMsg implements msgp.Marshaler
 func (z *FutureRecord) MarshalMsg(b []byte) (o []byte, err error) {
 	o = msgp.Require(b, z.Msgsize())
-	// map header, size 2
-	// string "Record"
-	o = append(o, 0x82, 0xa6, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64)
-	o, err = z.Record.MarshalMsg(o)
+	// map header, size 30
+	// string "method"
+	o = append(o, 0xde, 0x0, 0x1e, 0xa6, 0x6d, 0x65, 0x74, 0x68, 0x6f, 0x64)
+	o = msgp.AppendString(o, z.Method)
+	// string "host"
+	o = append(o, 0xa4, 0x68, 0x6f, 0x73, 0x74)
+	o = msgp.AppendString(o, z.Host)
+	// string "path"
+	o = append(o, 0xa4, 0x70, 0x61, 0x74, 0x68)
+	o = msgp.AppendString(o, z.Path)
+	// string "raw_path"
+	o = append(o, 0xa8, 0x72, 0x61, 0x77, 0x5f, 0x70, 0x61, 0x74, 0x68)
+	o = msgp.AppendString(o, z.RawPath)
+	// string "content_length"
+	o = append(o, 0xae, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x5f, 0x6c, 0x65, 0x6e, 0x67, 0x74, 0x68)
+	o = msgp.AppendInt64(o, z.ContentLength)
+	// string "user_agent"
+	o = append(o, 0xaa, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x61, 0x67, 0x65, 0x6e, 0x74)
+	o = msgp.AppendString(o, z.UserAgent)
+	// string "day"
+	o = append(o, 0xa3, 0x64, 0x61, 0x79)
+	o = msgp.AppendInt(o, z.Day)
+	// string "month"
+	o = append(o, 0xa5, 0x6d, 0x6f, 0x6e, 0x74, 0x68)
+	o = msgp.AppendInt(o, z.Month)
+	// string "year"
+	o = append(o, 0xa4, 0x79, 0x65, 0x61, 0x72)
+	o = msgp.AppendInt(o, z.Year)
+	// string "hour"
+	o = append(o, 0xa4, 0x68, 0x6f, 0x75, 0x72)
+	o = msgp.AppendInt(o, z.Hour)
+	// string "response_code"
+	o = append(o, 0xad, 0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x5f, 0x63, 0x6f, 0x64, 0x65)
+	o = msgp.AppendInt(o, z.ResponseCode)
+	// string "api_key"
+	o = append(o, 0xa7, 0x61, 0x70, 0x69, 0x5f, 0x6b, 0x65, 0x79)
+	o = msgp.AppendString(o, z.APIKey)
+	// string "timestamp"
+	o = append(o, 0xa9, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70)
+	o = msgp.AppendTime(o, z.TimeStamp)
+	// string "api_version"
+	o = append(o, 0xab, 0x61, 0x70, 0x69, 0x5f, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e)
+	o = msgp.AppendString(o, z.APIVersion)
+	// string "api_name"
+	o = append(o, 0xa8, 0x61, 0x70, 0x69, 0x5f, 0x6e, 0x61, 0x6d, 0x65)
+	o = msgp.AppendString(o, z.APIName)
+	// string "api_id"
+	o = append(o, 0xa6, 0x61, 0x70, 0x69, 0x5f, 0x69, 0x64)
+	o = msgp.AppendString(o, z.APIID)
+	// string "org_id"
+	o = append(o, 0xa6, 0x6f, 0x72, 0x67, 0x5f, 0x69, 0x64)
+	o = msgp.AppendString(o, z.OrgID)
+	// string "oauth_id"
+	o = append(o, 0xa8, 0x6f, 0x61, 0x75, 0x74, 0x68, 0x5f, 0x69, 0x64)
+	o = msgp.AppendString(o, z.OauthID)
+	// string "request_time"
+	o = append(o, 0xac, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x5f, 0x74, 0x69, 0x6d, 0x65)
+	o = msgp.AppendInt64(o, z.RequestTime)
+	// string "raw_request"
+	o = append(o, 0xab, 0x72, 0x61, 0x77, 0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74)
+	o = msgp.AppendString(o, z.RawRequest)
+	// string "raw_response"
+	o = append(o, 0xac, 0x72, 0x61, 0x77, 0x5f, 0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65)
+	o = msgp.AppendString(o, z.RawResponse)
+	// string "ip_address"
+	o = append(o, 0xaa, 0x69, 0x70, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73)
+	o = msgp.AppendString(o, z.IPAddress)
+	// string "geo"
+	o = append(o, 0xa3, 0x67, 0x65, 0x6f)
+	o, err = z.Geo.MarshalMsg(o)
 	if err != nil {
-		err = msgp.WrapError(err, "Record")
+		err = msgp.WrapError(err, "Geo")
 		return
 	}
-	// string "NewData"
-	o = append(o, 0xa7, 0x4e, 0x65, 0x77, 0x44, 0x61, 0x74, 0x61)
+	// string "network"
+	o = append(o, 0xa7, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b)
+	o, err = z.Network.MarshalMsg(o)
+	if err != nil {
+		err = msgp.WrapError(err, "Network")
+		return
+	}
+	// string "latency"
+	o = append(o, 0xa7, 0x6c, 0x61, 0x74, 0x65, 0x6e, 0x63, 0x79)
+	// map header, size 2
+	// string "total"
+	o = append(o, 0x82, 0xa5, 0x74, 0x6f, 0x74, 0x61, 0x6c)
+	o = msgp.AppendInt64(o, z.Latency.Total)
+	// string "upstream"
+	o = append(o, 0xa8, 0x75, 0x70, 0x73, 0x74, 0x72, 0x65, 0x61, 0x6d)
+	o = msgp.AppendInt64(o, z.Latency.Upstream)
+	// string "tags"
+	o = append(o, 0xa4, 0x74, 0x61, 0x67, 0x73)
+	o = msgp.AppendArrayHeader(o, uint32(len(z.Tags)))
+	for za0001 := range z.Tags {
+		o = msgp.AppendString(o, z.Tags[za0001])
+	}
+	// string "alias"
+	o = append(o, 0xa5, 0x61, 0x6c, 0x69, 0x61, 0x73)
+	o = msgp.AppendString(o, z.Alias)
+	// string "track_path"
+	o = append(o, 0xaa, 0x74, 0x72, 0x61, 0x63, 0x6b, 0x5f, 0x70, 0x61, 0x74, 0x68)
+	o = msgp.AppendBool(o, z.TrackPath)
+	// string "expireAt"
+	o = append(o, 0xa8, 0x65, 0x78, 0x70, 0x69, 0x72, 0x65, 0x41, 0x74)
+	o = msgp.AppendTime(o, z.ExpireAt)
+	// string "new_data"
+	o = append(o, 0xa8, 0x6e, 0x65, 0x77, 0x5f, 0x64, 0x61, 0x74, 0x61)
 	o = msgp.AppendString(o, z.NewData)
 	return
 }
@@ -211,13 +821,223 @@ func (z *FutureRecord) UnmarshalMsg(bts []byte) (o []byte, err error) {
 			return
 		}
 		switch msgp.UnsafeString(field) {
-		case "Record":
-			bts, err = z.Record.UnmarshalMsg(bts)
+		case "method":
+			z.Method, bts, err = msgp.ReadStringBytes(bts)
 			if err != nil {
-				err = msgp.WrapError(err, "Record")
+				err = msgp.WrapError(err, "Method")
 				return
 			}
-		case "NewData":
+		case "host":
+			z.Host, bts, err = msgp.ReadStringBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "Host")
+				return
+			}
+		case "path":
+			z.Path, bts, err = msgp.ReadStringBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "Path")
+				return
+			}
+		case "raw_path":
+			z.RawPath, bts, err = msgp.ReadStringBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "RawPath")
+				return
+			}
+		case "content_length":
+			z.ContentLength, bts, err = msgp.ReadInt64Bytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "ContentLength")
+				return
+			}
+		case "user_agent":
+			z.UserAgent, bts, err = msgp.ReadStringBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "UserAgent")
+				return
+			}
+		case "day":
+			z.Day, bts, err = msgp.ReadIntBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "Day")
+				return
+			}
+		case "month":
+			z.Month, bts, err = msgp.ReadIntBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "Month")
+				return
+			}
+		case "year":
+			z.Year, bts, err = msgp.ReadIntBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "Year")
+				return
+			}
+		case "hour":
+			z.Hour, bts, err = msgp.ReadIntBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "Hour")
+				return
+			}
+		case "response_code":
+			z.ResponseCode, bts, err = msgp.ReadIntBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "ResponseCode")
+				return
+			}
+		case "api_key":
+			z.APIKey, bts, err = msgp.ReadStringBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "APIKey")
+				return
+			}
+		case "timestamp":
+			z.TimeStamp, bts, err = msgp.ReadTimeBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "TimeStamp")
+				return
+			}
+		case "api_version":
+			z.APIVersion, bts, err = msgp.ReadStringBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "APIVersion")
+				return
+			}
+		case "api_name":
+			z.APIName, bts, err = msgp.ReadStringBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "APIName")
+				return
+			}
+		case "api_id":
+			z.APIID, bts, err = msgp.ReadStringBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "APIID")
+				return
+			}
+		case "org_id":
+			z.OrgID, bts, err = msgp.ReadStringBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "OrgID")
+				return
+			}
+		case "oauth_id":
+			z.OauthID, bts, err = msgp.ReadStringBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "OauthID")
+				return
+			}
+		case "request_time":
+			z.RequestTime, bts, err = msgp.ReadInt64Bytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "RequestTime")
+				return
+			}
+		case "raw_request":
+			z.RawRequest, bts, err = msgp.ReadStringBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "RawRequest")
+				return
+			}
+		case "raw_response":
+			z.RawResponse, bts, err = msgp.ReadStringBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "RawResponse")
+				return
+			}
+		case "ip_address":
+			z.IPAddress, bts, err = msgp.ReadStringBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "IPAddress")
+				return
+			}
+		case "geo":
+			bts, err = z.Geo.UnmarshalMsg(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "Geo")
+				return
+			}
+		case "network":
+			bts, err = z.Network.UnmarshalMsg(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "Network")
+				return
+			}
+		case "latency":
+			var zb0002 uint32
+			zb0002, bts, err = msgp.ReadMapHeaderBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "Latency")
+				return
+			}
+			for zb0002 > 0 {
+				zb0002--
+				field, bts, err = msgp.ReadMapKeyZC(bts)
+				if err != nil {
+					err = msgp.WrapError(err, "Latency")
+					return
+				}
+				switch msgp.UnsafeString(field) {
+				case "total":
+					z.Latency.Total, bts, err = msgp.ReadInt64Bytes(bts)
+					if err != nil {
+						err = msgp.WrapError(err, "Latency", "Total")
+						return
+					}
+				case "upstream":
+					z.Latency.Upstream, bts, err = msgp.ReadInt64Bytes(bts)
+					if err != nil {
+						err = msgp.WrapError(err, "Latency", "Upstream")
+						return
+					}
+				default:
+					bts, err = msgp.Skip(bts)
+					if err != nil {
+						err = msgp.WrapError(err, "Latency")
+						return
+					}
+				}
+			}
+		case "tags":
+			var zb0003 uint32
+			zb0003, bts, err = msgp.ReadArrayHeaderBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "Tags")
+				return
+			}
+			if cap(z.Tags) >= int(zb0003) {
+				z.Tags = (z.Tags)[:zb0003]
+			} else {
+				z.Tags = make([]string, zb0003)
+			}
+			for za0001 := range z.Tags {
+				z.Tags[za0001], bts, err = msgp.ReadStringBytes(bts)
+				if err != nil {
+					err = msgp.WrapError(err, "Tags", za0001)
+					return
+				}
+			}
+		case "alias":
+			z.Alias, bts, err = msgp.ReadStringBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "Alias")
+				return
+			}
+		case "track_path":
+			z.TrackPath, bts, err = msgp.ReadBoolBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "TrackPath")
+				return
+			}
+		case "expireAt":
+			z.ExpireAt, bts, err = msgp.ReadTimeBytes(bts)
+			if err != nil {
+				err = msgp.WrapError(err, "ExpireAt")
+				return
+			}
+		case "new_data":
 			z.NewData, bts, err = msgp.ReadStringBytes(bts)
 			if err != nil {
 				err = msgp.WrapError(err, "NewData")
@@ -237,7 +1057,11 @@ func (z *FutureRecord) UnmarshalMsg(bts []byte) (o []byte, err error) {
 
 // Msgsize returns an upper bound estimate of the number of bytes occupied by the serialized message
 func (z *FutureRecord) Msgsize() (s int) {
-	s = 1 + 7 + z.Record.Msgsize() + 8 + msgp.StringPrefixSize + len(z.NewData)
+	s = 3 + 7 + msgp.StringPrefixSize + len(z.Method) + 5 + msgp.StringPrefixSize + len(z.Host) + 5 + msgp.StringPrefixSize + len(z.Path) + 9 + msgp.StringPrefixSize + len(z.RawPath) + 15 + msgp.Int64Size + 11 + msgp.StringPrefixSize + len(z.UserAgent) + 4 + msgp.IntSize + 6 + msgp.IntSize + 5 + msgp.IntSize + 5 + msgp.IntSize + 14 + msgp.IntSize + 8 + msgp.StringPrefixSize + len(z.APIKey) + 10 + msgp.TimeSize + 12 + msgp.StringPrefixSize + len(z.APIVersion) + 9 + msgp.StringPrefixSize + len(z.APIName) + 7 + msgp.StringPrefixSize + len(z.APIID) + 7 + msgp.StringPrefixSize + len(z.OrgID) + 9 + msgp.StringPrefixSize + len(z.OauthID) + 13 + msgp.Int64Size + 12 + msgp.StringPrefixSize + len(z.RawRequest) + 13 + msgp.StringPrefixSize + len(z.RawResponse) + 11 + msgp.StringPrefixSize + len(z.IPAddress) + 4 + z.Geo.Msgsize() + 8 + z.Network.Msgsize() + 8 + 1 + 6 + msgp.Int64Size + 9 + msgp.Int64Size + 5 + msgp.ArrayHeaderSize
+	for za0001 := range z.Tags {
+		s += msgp.StringPrefixSize + len(z.Tags[za0001])
+	}
+	s += 6 + msgp.StringPrefixSize + len(z.Alias) + 11 + msgp.BoolSize + 9 + msgp.TimeSize + 9 + msgp.StringPrefixSize + len(z.NewData)
 	return
 }
 

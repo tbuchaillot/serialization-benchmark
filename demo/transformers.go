@@ -15,7 +15,7 @@ func TransformToNormalProto(recs []model.Record) []normal_proto.AnalyticsRecord 
 
 	for i, rec := range recs {
 		new := normal_proto.AnalyticsRecord{}
-		copier.Copy(&new, &rec)
+		copier.Copy(&new, &recs[i])
 
 		new.TimeStamp = timestamppb.New(rec.TimeStamp)
 		transformedRecs[i] = new

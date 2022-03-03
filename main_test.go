@@ -3,11 +3,13 @@ package main
 import (
 	"encoding/json"
 	"math/rand"
+	"reflect"
 	"serialization-benchmark/demo"
 	"serialization-benchmark/model"
 	"serialization-benchmark/model/analytics_bebop"
 	"serialization-benchmark/model/analyticsflatbuffers"
 	"serialization-benchmark/model/normal_proto"
+	"serialization-benchmark/model/protobuf-import/github.com/bmizerany/assert"
 	"testing"
 
 	"github.com/niubaoshu/gotiny"
@@ -47,22 +49,6 @@ func Benchmark_Msgpack_Marshal(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		o := data[rand.Intn(len(data))]
 		bytes, _ := msgpack.Marshal(&o)
-
-		serialSize += len(bytes)
-	}
-	b.ReportMetric(float64(serialSize)/float64(b.N), "B/serial")
-}
-
-func Benchmark_GoTiny_Marshal(b *testing.B) {
-	b.Helper()
-	data := data
-	b.ReportAllocs()
-	b.ResetTimer()
-	var serialSize int
-
-	for n := 0; n < b.N; n++ {
-		o := data[rand.Intn(len(data))]
-		bytes := gotiny.Marshal(&o)
 
 		serialSize += len(bytes)
 	}
@@ -115,6 +101,23 @@ func Benchmark_MsgpGen_Marshal(b *testing.B) {
 	b.ReportMetric(float64(serialSize)/float64(b.N), "B/serial")
 }
 
+func Benchmark_GoTiny_Marshal(b *testing.B) {
+	b.Helper()
+	data := data
+	b.ReportAllocs()
+	b.ResetTimer()
+	var serialSize int
+	ot := reflect.TypeOf(data[rand.Intn(len(data))])
+	enc := gotiny.NewEncoderWithType(ot)
+	for n := 0; n < b.N; n++ {
+		o := data[rand.Intn(len(data))]
+		bytes := enc.Encode(&o)
+
+		serialSize += len(bytes)
+	}
+	b.ReportMetric(float64(serialSize)/float64(b.N), "B/serial")
+}
+
 /*
 func Benchmark_Flatbuffer_Marshal(b *testing.B) {
 	b.Helper()
@@ -132,3 +135,35 @@ func Benchmark_Flatbuffer_Marshal(b *testing.B) {
 	b.ReportMetric(float64(serialSize)/float64(b.N), "B/serial")
 }
 */
+
+func Test_GoTiny_Future(t *testing.T) {
+	//Playing with gotiny
+	old := data[rand.Intn(len(data))]
+
+	ot := reflect.TypeOf(old)
+	enc := gotiny.NewEncoderWithType(ot)
+	dec := gotiny.NewDecoderWithType(ot)
+
+	byt := enc.Encode(old)
+
+	new := model.FutureRecord{}
+	dec.Decode(byt, &new)
+
+	assert.Equal(t, old.APIID, new.APIID)
+	assert.Equal(t, old.TimeStamp, new.TimeStamp)
+	assert.Equal(t, old.Latency, new.Latency)
+}
+
+func Test_MsgpGen_Future(t *testing.T) {
+	//Playing with gotiny
+	old := data[rand.Intn(len(data))]
+
+	bytes, _ := old.MarshalMsg(nil)
+
+	new := model.FutureRecord{}
+	new.UnmarshalMsg(bytes)
+
+	assert.Equal(t, old.APIID, new.APIID)
+	assert.Equal(t, old.TimeStamp, new.TimeStamp)
+	assert.Equal(t, old.Latency, new.Latency)
+}

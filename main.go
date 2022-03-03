@@ -3,10 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"math/rand"
+	"reflect"
 	"serialization-benchmark/demo"
 	"serialization-benchmark/model"
 	"serialization-benchmark/model/analytics_bebop"
-	"time"
 
 	"github.com/niubaoshu/gotiny"
 )
@@ -15,7 +16,7 @@ func main() {
 	var bebp []analytics_bebop.AnalyticsRecord = demo.TransofrmToBebop(demo.GenerateDemoData())
 	var randomData []model.Record = demo.GenerateDemoData()
 	fmt.Println("-===== gotiny")
-	tiny()
+	tiny(randomData)
 	fmt.Println("===== bbop")
 	bbop(bebp)
 
@@ -24,35 +25,29 @@ func main() {
 }
 
 func generatedMsgp(randomData []model.Record) {
-	o := randomData[0]
-	bytes, _ := o.MarshalMsg(nil)
+	//Playing with gotiny
+	old := randomData[rand.Intn(len(randomData))]
 
-	new := model.Record{}
-	leftover, err := new.UnmarshalMsg(bytes)
-	fmt.Println(leftover)
-	fmt.Println(err)
+	bytes, _ := old.MarshalMsg(nil)
+
+	new := model.FutureRecord{}
+	new.UnmarshalMsg(bytes)
+
 	fmt.Println(new.APIID, new.TimeStamp)
 }
 
-func tiny() {
+func tiny(randomData []model.Record) {
 	//Playing with gotiny
-	test := model.Record{}
-	test.APIID = "api_1"
-	test.TimeStamp = time.Now()
+	ot := reflect.TypeOf(randomData[rand.Intn(len(randomData))])
+	enc := gotiny.NewEncoderWithType(ot)
+	dec := gotiny.NewDecoderWithType(ot)
 
-	lot := []model.Record{}
-	lot = append(lot, test)
-	test.APIID = "api_2"
-	lot = append(lot, test)
+	byt := enc.Encode(randomData[rand.Intn(len(randomData))])
 
-	fmt.Println("test:", lot)
+	newLots := model.FutureRecord{}
+	dec.Decode(byt, &newLots)
 
-	byt := gotiny.Marshal(&lot)
-
-	newLots := []model.Record{}
-	gotiny.Unmarshal(byt, &newLots)
-
-	fmt.Println("newTest:", newLots)
+	fmt.Println(newLots.APIID, newLots.TimeStamp)
 
 }
 func bbop(bebp []analytics_bebop.AnalyticsRecord) {
