@@ -12,6 +12,7 @@ import (
 	"serialization-benchmark/model/protobuf-import/github.com/bmizerany/assert"
 	"testing"
 
+	"github.com/jinzhu/copier"
 	"github.com/niubaoshu/gotiny"
 
 	"github.com/golang/protobuf/proto"
@@ -137,7 +138,7 @@ func Benchmark_Flatbuffer_Marshal(b *testing.B) {
 */
 
 func Test_GoTiny_Future(t *testing.T) {
-	//Playing with gotiny
+
 	old := data[rand.Intn(len(data))]
 
 	ot := reflect.TypeOf(old)
@@ -154,14 +155,49 @@ func Test_GoTiny_Future(t *testing.T) {
 	assert.Equal(t, old.Latency, new.Latency)
 }
 
+func Test_GoTiny_Backwards(t *testing.T) {
+
+	new := model.FutureRecord{}
+	randRec := data[rand.Intn(len(data))]
+	copier.Copy(&new, &randRec)
+
+	ot := reflect.TypeOf(new)
+	enc := gotiny.NewEncoderWithType(ot)
+	dec := gotiny.NewDecoderWithType(ot)
+
+	byt := enc.Encode(new)
+
+	old := model.Record{}
+	dec.Decode(byt, &old)
+
+	assert.Equal(t, old.APIID, new.APIID)
+	assert.Equal(t, old.TimeStamp, new.TimeStamp)
+	assert.Equal(t, old.Latency, new.Latency)
+}
+
 func Test_MsgpGen_Future(t *testing.T) {
-	//Playing with gotiny
+
 	old := data[rand.Intn(len(data))]
 
 	bytes, _ := old.MarshalMsg(nil)
 
 	new := model.FutureRecord{}
 	new.UnmarshalMsg(bytes)
+
+	assert.Equal(t, old.APIID, new.APIID)
+	assert.Equal(t, old.TimeStamp, new.TimeStamp)
+	assert.Equal(t, old.Latency, new.Latency)
+}
+
+func Test_MsgpGen_Backwards(t *testing.T) {
+	new := model.FutureRecord{}
+	randRec := data[rand.Intn(len(data))]
+	copier.Copy(&new, &randRec)
+
+	bytes, _ := new.MarshalMsg(nil)
+
+	old := model.Record{}
+	old.UnmarshalMsg(bytes)
 
 	assert.Equal(t, old.APIID, new.APIID)
 	assert.Equal(t, old.TimeStamp, new.TimeStamp)
