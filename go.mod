@@ -3,6 +3,7 @@ module serialization-benchmark
 go 1.17
 
 require (
+	github.com/200sc/bebop v0.3.0
 	github.com/golang/protobuf v1.4.3
 	github.com/google/flatbuffers v2.0.6+incompatible
 	github.com/jinzhu/copier v0.3.5

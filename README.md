@@ -32,4 +32,4 @@ Benchmark_JSON_Marshal-8                      | 748794     | 3225 ns/op   | 988.
 Benchmark_Msgpack_Marshal-8           |    757999        |      3336 ns/op      |         795.4 B/serial  |     2901 B/op      |   11 allocs/op|
 Benchmark_GoTiny_Marshal-8            |   2090042          |    1148 ns/op        |       372.2 B/serial  |     1792 B/op     |     8 allocs/op|
 Benchmark_NormalProto_Marshal-8        |  1690639          |    1416 ns/op         |      402.3 B/serial   |     834 B/op     |     2 allocs/op|
-
+Benchmark_Bebop_Marshal-8              |    3170756            |     750.4 ns/op      |         550.7 B/serial      |    739 B/op     |       3 allocs/op

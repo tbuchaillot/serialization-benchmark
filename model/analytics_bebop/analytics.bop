@@ -1,61 +1,62 @@
-struct AnalyticsRecord struct {
-	Method        string       `json:"method" gorm:"column:method"`
-	Host          string       `json:"host" gorm:"column:host"`
-	Path          string       `json:"path" gorm:"column:path"`
-	RawPath       string       `json:"raw_path" gorm:"column:rawpath"`
-	ContentLength int64        `json:"content_length" gorm:"column:contentlength"`
-	UserAgent     string       `json:"user_agent" gorm:"column:useragent"`
-	Day           int          `json:"day" sql:"-"`
-	Month         time.Month   `json:"month" sql:"-"`
-	Year          int          `json:"year" sql:"-"`
-	Hour          int          `json:"hour" sql:"-"`
-	ResponseCode  int          `json:"response_code" gorm:"column:responsecode;index"`
-	APIKey        string       `json:"api_key" gorm:"column:apikey;index"`
-	TimeStamp     time.Time    `json:"timestamp" gorm:"column:timestamp;index"`
-	APIVersion    string       `json:"api_version" gorm:"column:apiversion"`
-	APIName       string       `json:"api_name" sql:"-"`
-	APIID         string       `json:"api_id" gorm:"column:apiid;index"`
-	OrgID         string       `json:"org_id" gorm:"column:orgid;index"`
-	OauthID       string       `json:"oauth_id" gorm:"column:oauthid;index"`
-	RequestTime   int64        `json:"request_time" gorm:"column:requesttime"`
-	RawRequest    string       `json:"raw_request" gorm:"column:rawrequest"`
-	RawResponse   string       `json:"raw_response" gorm:"column:rawresponse"`
-	IPAddress     string       `json:"ip_address" gorm:"column:ipaddress"`
-	Geo           GeoData      `json:"geo" gorm:"embedded"`
-	Network       NetworkStats `json:"network"`
-	Latency       Latency      `json:"latency"`
-	Tags          []string     `json:"tags"`
-	Alias         string       `json:"alias"`
-	TrackPath     bool         `json:"track_path" gorm:"column:trackpath"`
-	ExpireAt      time.Time    `bson:"expireAt" json:"expireAt"`
+message AnalyticsRecord {
+	1 -> string method;
+	2 -> string host;
+	3 -> string path;
+	4 -> string rawPath;
+	5 -> int64 contentLength;
+	6 -> NetworkStats network;
+	7 -> date timestamp;
+	8 -> date expireAt;
+	9 -> string useragent;
+	10 -> int32 day;
+	11 -> int32 year;
+	12 -> int32 month;
+	13 -> int32 hour;
+	14 -> int32 responseCode;
+	15 -> string apiKey;
+	16 -> string apiVersion;
+	17 -> string apiName;
+	18 -> string apiID;
+	19 -> string orgID;
+	20 -> string oauthID;
+	21 -> int64 requestTime;
+	22 -> string rawRequest;
+	23 -> string rawResponse;
+	24 -> string ipAddress;
+	25 -> GeoData geo;
+	26 -> string[] tags;
+	27 -> Latency latency;
+	28 -> bool trackPath;
 }
 
-type NetworkStats struct {
-	OpenConnections  int64 `json:"open_connections"`
-	ClosedConnection int64 `json:"closed_connections"`
-	BytesIn          int64 `json:"bytes_in"`
-	BytesOut         int64 `json:"bytes_out"`
+message NetworkStats{
+	1 -> int64 openConnections;
+	2 -> int64 closedConnections;
+	3 -> int64 bytesIn;
+	4 -> int64 bytesOut;
 }
 
-type Latency struct {
-	Total    int64 `json:"total"`
-	Upstream int64 `json:"upstream"`
-}
-type Country struct {
-	ISOCode string `maxminddb:"iso_code" json:"iso_code"`
+message GeoData{
+	1 -> Country country;
+	2 -> City city;
+	3 -> Location location;
 }
 
-type GeoData struct {
-	Country Country `maxminddb:"country" json:"country"`
+message Country{
+	1 -> string ISOCode;
+}
 
-	City struct {
-		GeoNameID uint              `maxminddb:"geoname_id" json:"geoname_id"`
-		Names     map[string]string `maxminddb:"names" json:"names"`
-	} `maxminddb:"city" json:"city"`
+message City{
+	1 -> uint32 GeoNameID;
+}
 
-	Location struct {
-		Latitude  float64 `maxminddb:"latitude" json:"latitude"`
-		Longitude float64 `maxminddb:"longitude" json:"longitude"`
-		TimeZone  string  `maxminddb:"time_zone" json:"time_zone"`
-	} `maxminddb:"location" json:"location"`
+message Location{
+	1 -> float64 latitude;
+	2 -> float64 longitude;
+	3 -> string timezone;
+}
+
+message Latency{
+	1 -> int64 total;
+	2 -> int64 upstream;
 }
