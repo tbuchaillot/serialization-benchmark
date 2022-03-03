@@ -101,6 +101,20 @@ func Benchmark_Bebop_Marshal(b *testing.B) {
 
 }
 
+func Benchmark_MsgpGen_Marshal(b *testing.B) {
+	b.Helper()
+	data := data
+	b.ReportAllocs()
+	b.ResetTimer()
+	var serialSize int
+	for n := 0; n < b.N; n++ {
+		o := data[rand.Intn(len(data))]
+		bytes, _ := o.MarshalMsg(nil)
+		serialSize += len(bytes)
+	}
+	b.ReportMetric(float64(serialSize)/float64(b.N), "B/serial")
+}
+
 /*
 func Benchmark_Flatbuffer_Marshal(b *testing.B) {
 	b.Helper()

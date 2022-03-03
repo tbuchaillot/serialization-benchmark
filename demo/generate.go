@@ -155,7 +155,7 @@ func GenerateDemoData() []model.Record {
 					ContentLength: int64(randomInRange(0, 999)),
 					UserAgent:     getUA(),
 					Day:           ts.Day(),
-					Month:         ts.Month(),
+					Month:         int(ts.Month()),
 					Year:          ts.Year(),
 					Hour:          ts.Hour(),
 					ResponseCode:  responseCode(),
@@ -177,7 +177,7 @@ func GenerateDemoData() []model.Record {
 				}
 
 				r.Geo.Country.ISOCode = country()
-			
+
 				recs = append(recs, r)
 			}
 		}
